@@ -26,7 +26,40 @@ SCOPES = 'https://www.googleapis.com/auth/spreadsheets.readonly'
 CLIENT_SECRET_FILE = 'client_secret.json'
 APPLICATION_NAME = 'Google Sheets API Python Quickstart'
 
-# parrain object contains all useful info about a parrain in a variable
+"""
+ Both the parrain and filleul objects with be filled using
+ dictionaries that associate their column letters with 
+ their actual parameters
+ for example B represents the lastName for the filleul sheet
+"""
+
+sheetToParam_f = {
+    'lastName': 'B',
+    'firstName':  'C',
+    'age': 'D',
+    'sex': 'E',
+    'email': 'F',
+    'university': 'G',
+    'subject': 'H',
+    'nationality': 'I',
+    'dateArrival': 'N',
+    'countryOrigin': 'P',
+    'hobbies': 'Q'                
+}
+
+sheetToParam_p = {
+    'lastName': 'B',
+    'firstName':  'C',
+    'age': 'D',
+    'sex': 'E',
+    'email': 'F',
+    'university': 'G',
+    'nationality': 'H',
+    'dateAvailable': 'K',
+    'languages': 'I',
+    'subject': 'M',
+    'hobbies': 'O',
+}
 
 class Parrain:
     def __init__(self, firstName, lastName, age, sex, email, dateAvailable,
@@ -81,7 +114,8 @@ def get_credentials():
         print('Storing credentials to ' + credential_path)
     return credentials
 
-def main():
+# given a google sheet id and two column letters, returns the values of the sheet
+def sheetToList(sheetid, col1, col2):
     # connect with credentials
     credentials = get_credentials()
     http = credentials.authorize(httplib2.Http())
@@ -89,24 +123,53 @@ def main():
                     'version=v4')
     service = discovery.build('sheets', 'v4', http=http,
                               discoveryServiceUrl=discoveryUrl)
+    
+    rangeName = col1 + ':' + col2
+    result = service.spreadsheets().values().get(
+        spreadsheetId=sheetid, range=rangeName).execute()
+    values = result.get('values', [])
 
-    # read spreadsheet 
-    spreadsheetId = input('Veuillez entrer l\'identifiant de votre document Google Sheets de Parrains.'
+    return values
+
+
+
+def main():
+
+    spreadsheetId = input('Veuillez entrer l\'identifiant de votre document Google Sheets pour les parrains.'
                           'Vous pourriez le trouver apres le /d/ et avant le /edit de l\'url de votre fichier.'
                           'ID GOOGLE SHEET ICI:')
 
-    # contain reading to desired columns
-    col1 = input('Premiere colonne a lire (lettre):')
-    col2 = input('Deuxieme colonne a lire (lettre):')
-    rangeName = col1 + ':' + col2
-    result = service.spreadsheets().values().get(
-        spreadsheetId=spreadsheetId, range=rangeName).execute()
-    values = result.get('values', [])
+    col1 = input('Premiere colonne a lire des parrains (lettre):')
+    col2 = input('Deuxieme colonne a lire des parrains (lettre):')
 
-    if not values:
-         add_err_msg(10, "main", "Aucune donnée trouvée");
+    
+    parrainsVal = sheetToList(spreadsheetId, col1, col2)
+
+    spreadsheetId = input('Veuillez entrer l\'identifiant de votre document Google Sheets pour les filleuls.'
+                          'Vous pourriez le trouver apres le /d/ et avant le /edit de l\'url de votre fichier.'
+                          'ID GOOGLE SHEET ICI:')
+
+    col1 = input('Premiere colonne a lire des filleuls (lettre):')
+    col2 = input('Deuxieme colonne a lire des filleuls (lettre):')
+
+    
+    filleulsVal = sheetToList(spreadsheetId, col1, col2)
+
+    
+    
+
+    if not parrainsVal:
+         add_err_msg(10, "main", "Aucune donnée trouvée pour le fichier de parrains")
     else:
-        for row in values:
+        for row in parrainsVal:
+            for col in row:
+                print(col)
+            print('\n\n\n')
+
+    if not filleulsVal:
+         add_err_msg(10, "main", "Aucune donnée trouvée pour le fichier de filleuls")
+    else:
+        for row in filleulsVal:
             for col in row:
                 print(col)
             print('\n\n\n')
