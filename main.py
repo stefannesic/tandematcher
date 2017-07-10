@@ -29,7 +29,7 @@ APPLICATION_NAME = 'Google Sheets API Python Quickstart'
 # parrain object contains all useful info about a parrain in a variable
 
 class Parrain:
-    def __init__(self, firstName, lastName, age, sex, email, dateAvailable
+    def __init__(self, firstName, lastName, age, sex, email, dateAvailable,
                  university, subject, hobbies, languages):
         self.firstName = firstName
         self.lastName = lastName
@@ -46,7 +46,7 @@ class Parrain:
 
 class Filleul:
     def __init__(self, firstName, lastName, age, sex,
-                 email, dateArrival, nationality, countryOrigin
+                 email, dateArrival, nationality, countryOrigin,
                  university, subject, hobbies):
         self.firstName = firstName
         self.lastName = lastName
