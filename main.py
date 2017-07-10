@@ -26,10 +26,42 @@ SCOPES = 'https://www.googleapis.com/auth/spreadsheets.readonly'
 CLIENT_SECRET_FILE = 'client_secret.json'
 APPLICATION_NAME = 'Google Sheets API Python Quickstart'
 
+# parrain object contains all useful info about a parrain in a variable
+
+class Parrain:
+    def __init__(self, firstName, lastName, age, sex, email, dateAvailable
+                 university, subject, hobbies, languages):
+        self.firstName = firstName
+        self.lastName = lastName
+        self.age = age
+        self.sex = sex
+        self.email = email
+        self.dateAvailable =dateAvailable
+        self.university = university
+        self.subjet = subject
+        self.hobbies = hobbies
+        self.languages = languages
+
+# filleul object contains all useful info about a filleul in a variable
+
+class Filleul:
+    def __init__(self, firstName, lastName, age, sex,
+                 email, dateArrival, nationality, countryOrigin
+                 university, subject, hobbies):
+        self.firstName = firstName
+        self.lastName = lastName
+        self.age = age
+        self.sex = sex
+        self.email = email
+        self.dateArrival = dateArrival
+        self.nationality = nationality
+        self.countryOrigin = countryOrigin
+        self.university = university
+        self.subject = subject
+        self.hobbies = hobbies
 
 def get_credentials():
-    # verification du cle API
-    
+    # verification of API key
     home_dir = os.path.expanduser('~')
     credential_dir = os.path.join(home_dir, '.credentials')
     if not os.path.exists(credential_dir):
@@ -50,7 +82,7 @@ def get_credentials():
     return credentials
 
 def main():
-    # connexion avec les identifiants du cle 
+    # connect with credentials
     credentials = get_credentials()
     http = credentials.authorize(httplib2.Http())
     discoveryUrl = ('https://sheets.googleapis.com/$discovery/rest?'
@@ -58,12 +90,12 @@ def main():
     service = discovery.build('sheets', 'v4', http=http,
                               discoveryServiceUrl=discoveryUrl)
 
-    # lecture du spreadsheet desire
+    # read spreadsheet 
     spreadsheetId = input('Veuillez entrer l\'identifiant de votre document Google Sheets de Parrains.'
                           'Vous pourriez le trouver apres le /d/ et avant le /edit de l\'url de votre fichier.'
                           'ID GOOGLE SHEET ICI:')
 
-    # lecture de colonnes 
+    # contain reading to desired columns
     col1 = input('Premiere colonne a lire (lettre):')
     col2 = input('Deuxieme colonne a lire (lettre):')
     rangeName = col1 + ':' + col2
