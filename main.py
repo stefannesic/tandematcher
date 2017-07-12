@@ -8,6 +8,7 @@ I have made modifications to some parts of it
 from __future__ import print_function
 import httplib2
 import os
+import create_log
 
 from apiclient import discovery
 from oauth2client import client
@@ -92,6 +93,13 @@ class Filleul:
         self.university = university
         self.subject = subject
         self.hobbies = hobbies
+    def __repr__(self):
+        return "<Filleul FN: %s | LN: %s | AGE: %s" \
+    "\nSEX: %s| EM: %s| DA: %s\nNA: %s|CO: %s| UNI: %s" \
+    "\nSU: %s| HO: %s" % (self.firstName, self.lastName, self.age, self.sex,
+                      self.email, self.dateArrival, self.nationality,
+                      self.countryOrigin, self.university, self.subject,
+                      self.hobbies)
 
 def get_credentials():
     # verification of API key
@@ -130,8 +138,26 @@ def sheetToList(sheetid, col1, col2):
     values = result.get('values', [])
 
     return values
+"""
+ given a character converts to it's order in the alphabet (A => 0) (B=> 1)
+ plus it's offset
 
+ example: 
+ charToNum('B') A => -1, B => 0, C => 2, etc.
 
+"""
+
+def charToNum(char, offset):
+    offsetVal = ord(offset.lower()) # gets ascii value of the offset
+    return ord(char.lower()) - offsetVal
+
+# reads values from row of listed parameters
+def listToVal(listParam, row, firstcol):
+    listVal = []
+    for param in listParam:
+        listVal.append(row[charToNum(sheetToParam_f[param], firstcol)]);
+    return listVal
+        
 
 def main():
 
@@ -139,40 +165,64 @@ def main():
                           'Vous pourriez le trouver apres le /d/ et avant le /edit de l\'url de votre fichier.'
                           'ID GOOGLE SHEET ICI:')
 
-    col1 = input('Premiere colonne a lire des parrains (lettre):')
-    col2 = input('Deuxieme colonne a lire des parrains (lettre):')
+    col1_p = input('Premiere colonne a lire des parrains (lettre):')
+    col2_p = input('Deuxieme colonne a lire des parrains (lettre):')
 
     
-    parrainsVal = sheetToList(spreadsheetId, col1, col2)
+    parrainsVal = sheetToList(spreadsheetId, col1_p, col2_p)
 
     spreadsheetId = input('Veuillez entrer l\'identifiant de votre document Google Sheets pour les filleuls.'
                           'Vous pourriez le trouver apres le /d/ et avant le /edit de l\'url de votre fichier.'
                           'ID GOOGLE SHEET ICI:')
 
-    col1 = input('Premiere colonne a lire des filleuls (lettre):')
-    col2 = input('Deuxieme colonne a lire des filleuls (lettre):')
+    col1_f = input('Premiere colonne a lire des filleuls (lettre):')
+    col2_f = input('Deuxieme colonne a lire des filleuls (lettre):')
 
     
-    filleulsVal = sheetToList(spreadsheetId, col1, col2)
+    filleulsVal = sheetToList(spreadsheetId, col1_f, col2_f)
 
     
     
-
+    """
     if not parrainsVal:
-         add_err_msg(10, "main", "Aucune donnée trouvée pour le fichier de parrains")
+    add_err_msg(10, "main",
+    "Aucune donnée trouvée pour le fichier de parrains")
     else:
-        for row in parrainsVal:
+    for row in parrainsVal:
             for col in row:
                 print(col)
             print('\n\n\n')
+    """
 
     if not filleulsVal:
-         add_err_msg(10, "main", "Aucune donnée trouvée pour le fichier de filleuls")
+         create_log.add_err_msg(10, "main",
+                     "Aucune donnée trouvée pour le fichier de filleuls")
     else:
         for row in filleulsVal:
-            for col in row:
-                print(col)
-            print('\n\n\n')
+            counter = 0
+            if (len(row) < 16):
+                create_log.add_err_msg(11, "main", "Filleul de nom %s " \
+                                      "n'a pas bien" \
+                            " rempli le formulaire" % row[0])
+            else:
+                listParam = ['firstName', 'lastName', 'age',
+                             'sex', 'email',
+                             'dateArrival', 'nationality',
+                             'countryOrigin',
+                             'university',
+                             'subject', 'hobbies']
+                            # reads values of parameters listed from document
+                valParam = listToVal(listParam, row, col1_f)
+                filleul = Filleul(valParam[0], valParam[1],
+                                  valParam[2],
+                                  valParam[3], valParam[4],
+                                  valParam[5],
+                                  valParam[6], valParam[7],
+                                  valParam[8],
+                                  valParam[9], valParam[10])
+
+                print(repr(filleul))
+                print('\n\n\n')
 
 
 if __name__ == '__main__':

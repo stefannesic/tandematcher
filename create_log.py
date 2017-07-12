@@ -9,8 +9,7 @@ logfile = open("tandematcher.log", "w");
 """
 def add_err_msg (err_code, fn_name, err_msg):
     timestamp = str(datetime.datetime.now())
-    err_string = timestamp + "Tandematcher Error [" + \
-                 err_code + "]: in " + fn_name + \
-                 ", " + err_msg
+    err_string = timestamp + "| Tandematcher Error [{}]: in {}, {}\n".format(
+        err_code, fn_name, err_msg)
 
     logfile.write(err_string);
