@@ -9,6 +9,7 @@ from __future__ import print_function
 import httplib2
 import os
 import create_log
+import dbexec
 
 from apiclient import discovery
 from oauth2client import client
@@ -288,6 +289,8 @@ def main():
 
                 print(repr(filleul))
                 print('\n\n\n')
+
+    print(dbexec.getid('caca'))
 
 
 if __name__ == '__main__':
