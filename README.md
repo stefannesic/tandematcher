@@ -1,7 +1,7 @@
 # Tandematcher Version 1.0
 ## Installation guide
 ### Step 1: Install python3
-### Step 2: Follow the first two steps of the Google Sheets v4 quickstart document
+### Step 2: Follow the first two steps of the Google Sheets v4 quickstart [document](https://developers.google.com/sheets/api/quickstart/python)
 ### Step 3: Download MySQL, create an account, a database, and save it to a file titled 'config.py'.
 ```
 connection_id = {
