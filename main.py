@@ -290,8 +290,6 @@ def main():
                 print(repr(filleul))
                 print('\n\n\n')
 
-    print(dbexec.getid('caca'))
-
 
 if __name__ == '__main__':
     main()
