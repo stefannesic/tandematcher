@@ -1,4 +1,5 @@
 # Tandematcher Version 1.0
+#### A simply Python script that I created in my first year of university for a student club to match language learners together based on their skills / goals. 
 ## Installation guide
 ### Step 1: Install python3
 ### Step 2: Follow the first two steps of the Google Sheets v4 quickstart [document](https://developers.google.com/sheets/api/quickstart/python)
